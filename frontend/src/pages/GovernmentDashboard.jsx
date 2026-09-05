@@ -26,7 +26,6 @@ const GovernmentDashboard = () => {
   });
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [seeding, setSeeding] = useState(false);
 
   const fetchData = async () => {
     setLoading(true);
@@ -54,34 +53,6 @@ const GovernmentDashboard = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
-  // Demo seeder so hackathon judges & testers can immediately see AI clustering in action
-  const handleSeedDemoData = async () => {
-    setSeeding(true);
-    const demoComplaints = [
-      { title: 'Major water leakage near Central Park', category: 'Water Leak', description: 'Water gushing onto road since morning, pressure dropping in nearby apartments.', location: 'Sector 4, Central Park', userId: 'cit-1' },
-      { title: 'Low water pressure and brown tap water', category: 'Water Leak', description: 'Tap water is muddy and pressure is very weak for past 2 days.', location: 'Sector 4, Central Park', userId: 'cit-2' },
-      { title: 'Burst pipe causing road flooding', category: 'Water Leak', description: 'Main supply pipe broken near park gate 2. Urgent attention needed.', location: 'Sector 4, Central Park', userId: 'cit-3' },
-      { title: 'Dangerous deep pothole on MG Road junction', category: 'Pothole', description: 'Deep crater after rain causing severe bike accidents.', location: 'MG Road Junction', userId: 'cit-4' },
-      { title: 'Asphalt eroded near MG Road flyover', category: 'Pothole', description: 'Multiple potholes expanding across both lanes.', location: 'MG Road Junction', userId: 'cit-5' },
-      { title: 'Streetlights flickering and going out', category: 'Streetlight', description: 'Entire 200m stretch dark at night, safety concern.', location: 'Civil Lines Road', userId: 'cit-6' }
-    ];
-
-    try {
-      for (const item of demoComplaints) {
-        await fetch(`${API_BASE_URL}/api/complaints`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(item)
-        });
-      }
-      await fetchData();
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setSeeding(false);
-    }
-  };
 
   const filteredHotspots = selectedCategory === 'All' 
     ? hotspots 
@@ -117,12 +88,12 @@ const GovernmentDashboard = () => {
 
           <div className="flex items-center space-x-3">
             <button 
-              onClick={handleSeedDemoData}
-              disabled={seeding}
-              className="px-3 py-1.5 bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-500/40 rounded-md text-xs font-medium text-indigo-200 flex items-center space-x-1.5 transition"
+              onClick={fetchData}
+              disabled={loading}
+              className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-md text-xs font-medium text-slate-200 flex items-center space-x-1.5 transition"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${seeding ? 'animate-spin' : ''}`} />
-              <span>{seeding ? 'Seeding Demo Data...' : '⚡ Seed Demo Data'}</span>
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+              <span>{loading ? 'Refreshing...' : 'Refresh'}</span>
             </button>
             <Link 
               to="/report" 
@@ -309,7 +280,7 @@ const GovernmentDashboard = () => {
                 {filteredHotspots.length === 0 ? (
                   <tr>
                     <td colSpan="5" className="py-8 text-center text-slate-500">
-                      No pattern clusters generated yet. Submit complaints or click "Seed Demo Data" above.
+                      No pattern clusters generated yet. Submit complaints via the citizen portal to generate live hotspots.
                     </td>
                   </tr>
                 ) : (
