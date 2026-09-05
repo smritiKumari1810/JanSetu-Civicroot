@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # MongoDB Database Service
+  database:
+    image: mongo:6.0
+    container_name: jansetu-mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - jansetu-network
+
+  # Node.js + Express Backend API & AI Intelligence Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: civicroot-backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://database:27017/jansetu
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - NODE_ENV=production
+    depends_on:
+      - database
+    networks:
+      - jansetu-network
+
+  # React Frontend (Vite + Nginx)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: jansetu-frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - jansetu-network
+
+volumes:
+  mongo_data:
+
+networks:
+  jansetu-network:
+    driver: bridge
