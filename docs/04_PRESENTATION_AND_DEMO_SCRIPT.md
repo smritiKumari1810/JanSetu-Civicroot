@@ -1,4 +1,4 @@
-# 🎤 3-Minute Hackathon Presentation & Live Demo Script
+# 🎤 3-Minute Hackathon Presentation & Live Demo Script (Updated)
 
 Use this exact timing and script when presenting **JanSetu + CivicRoot AI** to the judges.
 
@@ -8,7 +8,7 @@ Use this exact timing and script when presenting **JanSetu + CivicRoot AI** to t
 
 ```
 0:00 - 0:45 ➔ The Hook & The Problem
-0:45 - 1:45 ➔ The Solution & Live Product Demo
+0:45 - 1:45 ➔ The Solution & Live Product Demo (Photos & Voice Notes)
 1:45 - 2:30 ➔ Technical Architecture & AI Innovation
 2:30 - 3:00 ➔ Impact, Feasibility & Closing
 ```
@@ -28,15 +28,14 @@ Use this exact timing and script when presenting **JanSetu + CivicRoot AI** to t
 ---
 
 ### 2. The Solution & Live Demo (0:45 - 1:45)
-*(Action: Open screen to [http://localhost:5173](http://localhost:5173))*
+*(Action: Open screen to `/report`)*
 
 > *"Our platform operates in two synchronized layers:  
 > 
 > **Layer 1 is JanSetu — The Citizen Portal.**  
-> *(Click 'Report Issue')*  
-> Citizens don't need to know municipal hierarchies. They simply enter the problem, attach photos or voice notes, drop a pin, and hit Submit.  
-> *(Click 'My Reports')*  
-> Citizens get live, transparent tracking chips so grievances never disappear into a bureaucratic black hole.  
+> Citizens don't need to navigate complex government departments. They select a category, drop a pin using our **'📍 Auto-detect GPS'**, snap a live photo, or simply record a **🎙️ multi-lingual voice note**.  
+> *(Click 'Submit')*  
+> Evidence is instantly streamed to **Cloudinary CDN**, and citizens receive an immediate tracking ID like `#JS-8821` to monitor progress on their **'My Reports'** page with transparent status chips.  
 > 
 > **Layer 2 is CivicRoot AI — The Municipal Command Center.**  
 > *(Click 'CivicRoot AI' in top navigation to open `/gov-dashboard`)*  
@@ -51,10 +50,10 @@ Use this exact timing and script when presenting **JanSetu + CivicRoot AI** to t
 *(Action: Show the Risk Matrix table on the dashboard)*
 
 > *"Behind the scenes:  
-> - We built a scalable **Node.js & Express REST architecture** backed by **MongoDB**.  
-> - Our AI pipeline uses **Google Gemini 2.5 Flash** for deep semantic understanding, coupled with a zero-downtime heuristic fallback engine.  
-> - We have an automated test suite with **100% test coverage** across all endpoints.  
-> - The entire stack is **fully containerized with Docker** for instant deployment on Google Cloud Run."*
+> - We built a scalable **React 19 + Node.js & Express REST architecture** deployed seamlessly on **Vercel** and **Render**.  
+> - Our data is stored in **MongoDB Atlas**, and media is distributed through **Cloudinary CDN**.  
+> - Our AI pipeline uses **Google Gemini 3.6 Flash** for deep semantic understanding, backed by a zero-downtime heuristic fallback engine.  
+> - We have an automated test suite with **100% test coverage** across 9 test cases and dedicated `/health` monitoring."*
 
 ---
 
