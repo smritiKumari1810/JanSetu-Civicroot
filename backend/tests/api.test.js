@@ -8,13 +8,16 @@ jest.mock('../models/Complaint');
 
 describe('JanSetu + CivicRoot API Test Suite', () => {
   const originalApiKey = process.env.GEMINI_API_KEY;
+  const originalCloudName = process.env.CLOUDINARY_CLOUD_NAME;
 
   beforeAll(() => {
     delete process.env.GEMINI_API_KEY;
+    delete process.env.CLOUDINARY_CLOUD_NAME;
   });
 
   afterAll(() => {
     if (originalApiKey) process.env.GEMINI_API_KEY = originalApiKey;
+    if (originalCloudName) process.env.CLOUDINARY_CLOUD_NAME = originalCloudName;
   });
 
   beforeEach(() => {
@@ -26,6 +29,15 @@ describe('JanSetu + CivicRoot API Test Suite', () => {
     const res = await request(app).get('/');
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toContain('JanSetu + CivicRoot API is running');
+  });
+
+  // Test 1b: Dedicated /health route
+  test('GET /health should return system status and uptime', async () => {
+    const res = await request(app).get('/health');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.status).toBe('healthy');
+    expect(res.body).toHaveProperty('uptime');
+    expect(res.body).toHaveProperty('database');
   });
 
   // Test 2: Successful Complaint Submission with Cloudinary Media URLs

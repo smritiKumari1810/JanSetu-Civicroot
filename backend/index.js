@@ -29,6 +29,18 @@ app.get('/', (req, res) => {
   res.json({ message: 'JanSetu + CivicRoot API is running.' });
 });
 
+// GET /health - Dedicated Health Check Route for Render and Uptime Monitors
+app.get('/health', (req, res) => {
+  const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+  res.status(200).json({
+    status: 'healthy',
+    service: 'JanSetu + CivicRoot API',
+    uptime: `${Math.floor(process.uptime())}s`,
+    database: dbStatus,
+    timestamp: new Date().toISOString()
+  });
+});
+
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
