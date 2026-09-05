@@ -8,15 +8,14 @@ import {
   CheckCircle2, 
   AlertCircle, 
   Timer, 
-  ChevronRight,
   Filter,
-  Sparkles,
   Droplets,
   Construction,
   Lightbulb,
   Trash2,
   Zap,
-  HelpCircle
+  HelpCircle,
+  RefreshCw
 } from 'lucide-react';
 
 const getCategoryIcon = (category) => {
@@ -43,70 +42,29 @@ const TrackingDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('All');
+  const [error, setError] = useState(null);
+
+  const fetchCitizenComplaints = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch('http://localhost:5000/api/complaints/citizen-123');
+      if (!res.ok) {
+        throw new Error('Failed to fetch from server');
+      }
+      const data = await res.json();
+      setComplaints(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.warn('API error:', err.message);
+      setError('Unable to connect to the backend server. Please ensure the server is running on port 5000.');
+      setComplaints([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/complaints/citizen-123')
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data) && data.length > 0) {
-          setComplaints(data);
-        } else {
-          // Fallback initial sample data for smooth testing
-          setComplaints([
-            {
-              _id: '67c858291a01',
-              title: 'Major water pipe leak near school gate',
-              category: 'Water Leak',
-              description: 'Continuous drinking water leakage flooding the footpath.',
-              location: 'Sector 4, Main Market Road',
-              status: 'In Progress',
-              createdAt: new Date(Date.now() - 3600000 * 24).toISOString()
-            },
-            {
-              _id: '67c858291a02',
-              title: 'Deep pothole causing motorcycle skid',
-              category: 'Pothole',
-              description: 'Large crater in the right lane after rains.',
-              location: 'MG Road Flyover Exit',
-              status: 'Resolved',
-              createdAt: new Date(Date.now() - 3600000 * 72).toISOString()
-            },
-            {
-              _id: '67c858291a03',
-              title: 'Streetlights not operational on Ring Road',
-              category: 'Streetlight',
-              description: '4 continuous poles dark at night.',
-              location: 'Civil Lines Outer Ring',
-              status: 'Pending',
-              createdAt: new Date(Date.now() - 3600000 * 4).toISOString()
-            }
-          ]);
-        }
-        setLoading(false);
-      })
-      .catch(() => {
-        setComplaints([
-          {
-            _id: '67c858291a01',
-            title: 'Major water pipe leak near school gate',
-            category: 'Water Leak',
-            description: 'Continuous drinking water leakage flooding the footpath.',
-            location: 'Sector 4, Main Market Road',
-            status: 'In Progress',
-            createdAt: new Date(Date.now() - 3600000 * 24).toISOString()
-          },
-          {
-            _id: '67c858291a02',
-            title: 'Deep pothole causing motorcycle skid',
-            category: 'Pothole',
-            description: 'Large crater in the right lane after rains.',
-            location: 'MG Road Flyover Exit',
-            status: 'Resolved',
-            createdAt: new Date(Date.now() - 3600000 * 72).toISOString()
-          }
-        ]);
-        setLoading(false);
-      });
+    fetchCitizenComplaints();
   }, []);
 
   const getStatusBadge = (status) => {
@@ -137,9 +95,9 @@ const TrackingDashboard = () => {
 
   const filtered = complaints.filter(c => {
     const matchesFilter = selectedFilter === 'All' || c.status === selectedFilter;
-    const matchesSearch = c.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          c.location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          c.category?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = (c.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          (c.location || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          (c.category || '').toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
@@ -156,14 +114,34 @@ const TrackingDashboard = () => {
             <h1 className="text-2xl font-bold text-slate-900">My Grievance History</h1>
             <p className="text-xs text-slate-500 mt-0.5">Real-time status updates and municipal dispatch logs</p>
           </div>
-          <Link
-            to="/report"
-            className="px-5 py-2.5 bg-[#F97316] hover:bg-orange-600 text-white font-bold text-sm rounded-xl flex items-center space-x-1.5 shadow-md shadow-orange-500/20 transition"
-          >
-            <PlusCircle className="w-4 h-4" />
-            <span>File New Report</span>
-          </Link>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={fetchCitizenComplaints}
+              className="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition"
+              title="Refresh complaints"
+            >
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            </button>
+            <Link
+              to="/report"
+              className="px-5 py-2.5 bg-[#F97316] hover:bg-orange-600 text-white font-bold text-sm rounded-xl flex items-center space-x-1.5 shadow-md shadow-orange-500/20 transition"
+            >
+              <PlusCircle className="w-4 h-4" />
+              <span>File New Report</span>
+            </Link>
+          </div>
         </div>
+
+        {/* Server Connection Error Alert if server is offline */}
+        {error && (
+          <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+              <span>{error}</span>
+            </div>
+            <button onClick={fetchCitizenComplaints} className="font-bold underline ml-2">Retry</button>
+          </div>
+        )}
 
         {/* Search & Filters */}
         <div className="flex flex-col sm:flex-row gap-3">
@@ -199,19 +177,23 @@ const TrackingDashboard = () => {
         {loading ? (
           <div className="p-12 text-center text-slate-500">
             <Timer className="w-8 h-8 animate-spin mx-auto mb-2 text-blue-600" />
-            <p className="text-sm">Fetching your grievance status...</p>
+            <p className="text-sm">Fetching your live grievance records from database...</p>
           </div>
         ) : filtered.length === 0 ? (
           <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center space-y-4 shadow-sm">
-            <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-400">
-              <Filter className="w-6 h-6" />
+            <div className="w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-400">
+              <Filter className="w-7 h-7" />
             </div>
-            <h3 className="text-base font-bold text-slate-800">No grievances found</h3>
+            <h3 className="text-lg font-bold text-slate-800">No Grievances Recorded</h3>
             <p className="text-xs text-slate-500 max-w-sm mx-auto">
-              No matching complaints under this filter. Have a new issue to report?
+              You haven't reported any civic issues yet, or no complaints match your filter.
             </p>
-            <Link to="/report" className="inline-block px-4 py-2 bg-[#1A56DB] text-white text-xs font-semibold rounded-lg">
-              Report Issue
+            <Link 
+              to="/report" 
+              className="inline-flex items-center space-x-1.5 px-5 py-2.5 bg-[#1A56DB] hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md shadow-blue-500/20 transition"
+            >
+              <PlusCircle className="w-4 h-4" />
+              <span>Report an Issue Now</span>
             </Link>
           </div>
         ) : (
@@ -229,7 +211,7 @@ const TrackingDashboard = () => {
                     <div>
                       <div className="flex items-center space-x-2">
                         <span className="text-xs font-mono font-bold text-slate-500">
-                          #JS-{item._id?.slice(-4)?.toUpperCase() || '8821'}
+                          #JS-{item._id ? item._id.slice(-4).toUpperCase() : 'NEW'}
                         </span>
                         <span className="text-xs text-slate-400">•</span>
                         <span className="text-xs font-semibold text-slate-600">{item.category}</span>
@@ -254,7 +236,7 @@ const TrackingDashboard = () => {
 
                   <div className="flex items-center space-x-1.5">
                     <Clock className="w-3.5 h-3.5 text-slate-400" />
-                    <span>{new Date(item.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                    <span>{item.createdAt ? new Date(item.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'Just now'}</span>
                   </div>
                 </div>
               </div>

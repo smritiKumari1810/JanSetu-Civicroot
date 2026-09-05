@@ -8,6 +8,7 @@
     "dev:backend": "cd backend && node index.js",
     "dev:frontend": "cd frontend && npm run dev",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "db:clear": "cd backend && node scripts/clearDb.js",
     "test": "cd backend && npm test",
     "build": "cd frontend && npm run build"
   },

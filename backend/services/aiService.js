@@ -70,7 +70,7 @@ Return ONLY a valid JSON array. No markdown fences, no explanatory text.
 `;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3.6-flash',
       contents: prompt,
     });
 

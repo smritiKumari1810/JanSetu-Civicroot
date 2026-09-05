@@ -8,6 +8,16 @@ const { heuristicClustering } = require('../services/aiService');
 jest.mock('../models/Complaint');
 
 describe('JanSetu + CivicRoot API Test Suite', () => {
+  const originalApiKey = process.env.GEMINI_API_KEY;
+
+  beforeAll(() => {
+    delete process.env.GEMINI_API_KEY;
+  });
+
+  afterAll(() => {
+    if (originalApiKey) process.env.GEMINI_API_KEY = originalApiKey;
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -49,15 +59,13 @@ describe('JanSetu + CivicRoot API Test Suite', () => {
   });
 
   // Test 3: Validation Error Handling
-  test('POST /api/complaints should handle database save errors with 500 status', async () => {
-    Complaint.prototype.save = jest.fn().mockRejectedValue(new Error('Validation error: missing field'));
-
+  test('POST /api/complaints should return 400 when required fields are missing', async () => {
     const res = await request(app)
       .post('/api/complaints')
       .send({ title: 'Incomplete complaint' });
 
-    expect(res.statusCode).toBe(500);
-    expect(res.body).toHaveProperty('error', 'Failed to submit complaint');
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty('error');
   });
 
   // Test 4: Retrieve Citizen Specific History
