@@ -9,15 +9,17 @@ app.use(express.json());
 
 // Routes
 const complaintRoutes = require('./routes/complaints');
+const intelligenceRoutes = require('./routes/intelligence');
+
 app.use('/api/complaints', complaintRoutes);
+app.use('/api/intelligence', intelligenceRoutes);
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/jansetu';
 
-// Only connect to MongoDB if not in a test mock mode
 mongoose.connect(MONGO_URI)
   .then(() => console.log('MongoDB connected to JanSetu database'))
-  .catch(err => console.log('MongoDB connection error (ensure MongoDB is running or URI is set in .env):', err.message));
+  .catch(err => console.log('MongoDB connection notice:', err.message));
 
 app.get('/', (req, res) => {
   res.json({ message: 'JanSetu + CivicRoot API is running.' });
