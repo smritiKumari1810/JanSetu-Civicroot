@@ -17,6 +17,7 @@ import {
   HelpCircle,
   RefreshCw
 } from 'lucide-react';
+import { API_BASE_URL } from '../config/api';
 
 const getCategoryIcon = (category) => {
   switch (category?.toLowerCase()) {
@@ -48,7 +49,7 @@ const TrackingDashboard = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('http://localhost:5000/api/complaints/citizen-123');
+      const res = await fetch(`${API_BASE_URL}/api/complaints/citizen-123`);
       if (!res.ok) {
         throw new Error('Failed to fetch from server');
       }

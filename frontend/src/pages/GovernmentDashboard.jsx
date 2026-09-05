@@ -13,6 +13,7 @@ import {
   BarChart3,
   Flame
 } from 'lucide-react';
+import { API_BASE_URL } from '../config/api';
 
 const GovernmentDashboard = () => {
   const [hotspots, setHotspots] = useState([]);
@@ -31,8 +32,8 @@ const GovernmentDashboard = () => {
     setLoading(true);
     try {
       const [hotspotsRes, statsRes] = await Promise.all([
-        fetch('http://localhost:5000/api/intelligence/hotspots').catch(() => null),
-        fetch('http://localhost:5000/api/intelligence/stats').catch(() => null)
+        fetch(`${API_BASE_URL}/api/intelligence/hotspots`).catch(() => null),
+        fetch(`${API_BASE_URL}/api/intelligence/stats`).catch(() => null)
       ]);
 
       if (hotspotsRes && hotspotsRes.ok) {
@@ -68,7 +69,7 @@ const GovernmentDashboard = () => {
 
     try {
       for (const item of demoComplaints) {
-        await fetch('http://localhost:5000/api/complaints', {
+        await fetch(`${API_BASE_URL}/api/complaints`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(item)
