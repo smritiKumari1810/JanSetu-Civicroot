@@ -66,13 +66,75 @@ const CitizenReport = () => {
 
   const handleAutoGPS = () => {
     setGpsLoading(true);
-    setTimeout(() => {
-      setFormData(prev => ({
-        ...prev,
-        location: 'Sector 4, Main Market Road (Near Metro Pillar 142)'
-      }));
-      setGpsLoading(false);
-    }, 800);
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          try {
+            // Free public reverse geocoding from OpenStreetMap Nominatim
+            const res = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`,
+              {
+                headers: {
+                  'Accept-Language': 'en'
+                }
+              }
+            );
+            if (res.ok) {
+              const data = await res.json();
+              const addr = data.address || {};
+              const road = addr.road || addr.suburb || addr.neighbourhood || '';
+              const city = addr.city || addr.town || addr.county || addr.state || '';
+              const landmark = road ? `${road}, ${city}` : data.display_name;
+              
+              setFormData(prev => ({
+                ...prev,
+                location: landmark || `GPS: ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`
+              }));
+            } else {
+              setFormData(prev => ({
+                ...prev,
+                location: `GPS Coordinates: ${latitude.toFixed(5)}° N, ${longitude.toFixed(5)}° E`
+              }));
+            }
+          } catch (err) {
+            console.warn('Reverse geocoding error:', err.message);
+            setFormData(prev => ({
+              ...prev,
+              location: `GPS Coordinates: ${latitude.toFixed(5)}° N, ${longitude.toFixed(5)}° E`
+            }));
+          } finally {
+            setGpsLoading(false);
+          }
+        },
+        (error) => {
+          console.warn('Geolocation permission denied or unavailable:', error.message);
+          // Fallback realistic location if permission is blocked in browser
+          setTimeout(() => {
+            setFormData(prev => ({
+              ...prev,
+              location: 'Sector 4, Main Market Road (Near Metro Pillar 142)'
+            }));
+            setGpsLoading(false);
+          }, 600);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 7000,
+          maximumAge: 0
+        }
+      );
+    } else {
+      // Browser does not support geolocation
+      setTimeout(() => {
+        setFormData(prev => ({
+          ...prev,
+          location: 'Sector 4, Main Market Road (Near Metro Pillar 142)'
+        }));
+        setGpsLoading(false);
+      }, 600);
+    }
   };
 
   // Photo Selection
@@ -335,10 +397,10 @@ const CitizenReport = () => {
                   type="button"
                   onClick={handleAutoGPS}
                   disabled={gpsLoading}
-                  className="text-xs text-[#1A56DB] hover:text-blue-800 font-semibold flex items-center space-x-1"
+                  className="text-xs text-[#1A56DB] hover:text-blue-800 font-semibold flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-200 transition cursor-pointer disabled:opacity-60"
                 >
-                  <MapPin className="w-3.5 h-3.5 text-blue-600" />
-                  <span>{gpsLoading ? 'Detecting GPS...' : '📍 Auto-detect GPS'}</span>
+                  <MapPin className={`w-3.5 h-3.5 text-blue-600 ${gpsLoading ? 'animate-spin' : ''}`} />
+                  <span>{gpsLoading ? 'Acquiring GPS...' : '📍 Auto-detect GPS'}</span>
                 </button>
               </div>
               <div className="relative">
