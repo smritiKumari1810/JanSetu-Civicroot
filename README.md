@@ -76,6 +76,9 @@ npm test
 
 ---
 
-## 📖 Documentation
-- [Phase-by-Phase Master Development Plan](file:///C:/Users/SMRITI%20KUMARI/.gemini/antigravity/brain/14154590-d2e0-4e2b-a8e7-111125b1278f/implementation_plan.md)
-- [Complete Deployment Guide](file:///c:/Users/SMRITI%20KUMARI/OneDrive/Documents/JanSetu+Civicroot/DEPLOYMENT.md)
+## 📖 Comprehensive Documentation
+- 📘 **[Master Project Handbook (Start Here!)](docs/MASTER_PROJECT_HANDBOOK.md)** — Everything from project idea to development, modules, data flows, and non-coder guides.
+- 🏆 **[Hackathon Judge Q&A Cheat Sheet](docs/03_HACKATHON_JUDGE_QA.md)** — 15 high-scoring questions and answers.
+- 🎤 **[3-Minute Presentation & Demo Script](docs/04_PRESENTATION_AND_DEMO_SCRIPT.md)** — Step-by-step pitch script.
+- 📚 **[Technical Glossary for Non-Coders](docs/05_TECH_GLOSSARY_FOR_NON_CODERS.md)** — Plain-English dictionary of technical terms.
+- 🚀 **[Vercel & Render Deployment Guide](docs/DEPLOY_VERCEL_RENDER.md)** — Step-by-step cloud deployment instructions.
