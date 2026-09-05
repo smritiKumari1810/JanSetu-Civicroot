@@ -90,12 +90,21 @@ This document equips your team with exact, high-scoring answers to every questio
 
 ## 5. Data Privacy, Security & Anti-Abuse
 
-### Q9: How do you prevent spam, fake complaints, or citizen trolling?
-> **Answer to give:**  
-> *"We address this at three levels:  
-> 1. **Citizen Authentication:** Mobile OTP verification or Aadhaar/Civic ID tie-in.  
-> 2. **Duplicate Detection:** If a user submits 50 identical reports, CivicRoot's semantic clustering groups them as a single data point from one user.  
-> 3. **Media Verification:** Image EXIF metadata and geolocation verification ensure uploaded photos match the reported location and timestamp."*
+### Q9: How do you handle fake inputs, spam, or malicious complaints?
+> **Answer to give (The 4-Pillar Defense):**  
+> *"In civic governance, fake or spam data can waste crucial municipal resources. JanSetu + CivicRoot AI tackles this through a **4-Pillar Multi-Layer Verification System**:
+> 
+> 1. **📍 Hardware & GPS Proof (Spatial Grounding):**  
+>    JanSetu captures live device GPS coordinates and validates image EXIF metadata. If someone claims a pothole exists in South Delhi while their device or photo timestamp originates elsewhere, the system flags the anomaly.
+> 
+> 2. **🧠 AI Semantic Deduplication & Computer Vision:**  
+>    Our AI checks if an uploaded image is authentic or downloaded from the web, and semantically verifies that the photo matches the description (e.g., ensuring a 'water leak' report actually shows water leakage).
+> 
+> 3. **🤝 Multi-Citizen Corroboration (Consensus Clustering):**  
+>    CivicRoot only triggers high-priority municipal dispatches and root-cause failure alerts when **multiple independent citizens** corroborate an issue in the same geographical radius. A lone spam report remains unclustered until physically verified.
+> 
+> 4. **🛡️ Citizen Reputation & Rate Limiting:**  
+>    Accounts are tied to verified mobile OTP / Civic IDs. Users submitting verified genuine reports gain trust score weighting, while abusive or spamming accounts face strict IP/device rate limits and throttling."*
 
 ---
 
