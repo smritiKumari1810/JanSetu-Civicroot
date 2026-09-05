@@ -5,7 +5,7 @@ const Complaint = require('../models/Complaint');
 // POST: Submit a new complaint
 router.post('/', async (req, res) => {
   try {
-    const { title, category, description, location, userId } = req.body;
+    const { title, category, description, location, userId, imageUrl, audioUrl } = req.body;
     if (!title || !category || !description || !location) {
       return res.status(400).json({ error: 'All fields (title, category, description, location) are required.' });
     }
@@ -14,7 +14,9 @@ router.post('/', async (req, res) => {
       category,
       description,
       location,
-      userId: userId || 'citizen-123'
+      userId: userId || 'citizen-123',
+      imageUrl: imageUrl || null,
+      audioUrl: audioUrl || null
     });
     const savedComplaint = await newComplaint.save();
     res.status(201).json(savedComplaint);

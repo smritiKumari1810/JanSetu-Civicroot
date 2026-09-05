@@ -44,6 +44,9 @@ Fill in the following fields:
 Scroll down to **"Environment Variables"** and add:
 - `MONGO_URI` = `mongodb://Jansetu-CivicRoot:2Zp3kqbX4NIaBgU8@ac-ym4qevq-shard-00-00.9cenpcq.mongodb.net:27017,ac-ym4qevq-shard-00-01.9cenpcq.mongodb.net:27017,ac-ym4qevq-shard-00-02.9cenpcq.mongodb.net:27017/Jansetucivicroot?ssl=true&replicaSet=atlas-maliaz-shard-0&authSource=admin&appName=Cluster0`
 - `GEMINI_API_KEY` = `your_gemini_api_key_here` *(Optional)*
+- `CLOUDINARY_CLOUD_NAME` = `your_cloud_name` *(Optional: for live photo/voice uploads)*
+- `CLOUDINARY_API_KEY` = `your_cloudinary_api_key` *(Optional)*
+- `CLOUDINARY_API_SECRET` = `your_cloudinary_api_secret` *(Optional)*
 - `NODE_ENV` = `production`
 
 ### Step 1.5: Deploy & Copy Live URL

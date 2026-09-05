@@ -10,9 +10,11 @@ app.use(express.json());
 // Routes
 const complaintRoutes = require('./routes/complaints');
 const intelligenceRoutes = require('./routes/intelligence');
+const uploadRoutes = require('./routes/upload');
 
 app.use('/api/complaints', complaintRoutes);
 app.use('/api/intelligence', intelligenceRoutes);
+app.use('/api/upload', uploadRoutes);
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/jansetu';

@@ -229,6 +229,28 @@ const TrackingDashboard = () => {
                   {item.description}
                 </p>
 
+                {/* Attached Media Previews */}
+                {(item.imageUrl || item.audioUrl) && (
+                  <div className="flex flex-wrap items-center gap-3 pt-1">
+                    {item.imageUrl && (
+                      <a 
+                        href={item.imageUrl} 
+                        target="_blank" 
+                        rel="noreferrer"
+                        className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-lg text-xs font-semibold text-blue-700 hover:bg-blue-100 transition"
+                      >
+                        <span>📷 View Attached Photo</span>
+                      </a>
+                    )}
+                    {item.audioUrl && (
+                      <div className="flex items-center space-x-2 bg-slate-100 px-3 py-1 rounded-lg border border-slate-200">
+                        <span className="text-xs font-semibold text-slate-700">🎙️ Voice Note:</span>
+                        <audio src={item.audioUrl} controls className="h-6 w-36 sm:w-48" />
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 pt-1 border-t border-slate-100">
                   <div className="flex items-center space-x-1.5">
                     <MapPin className="w-3.5 h-3.5 text-slate-400" />

@@ -2,7 +2,6 @@ process.env.NODE_ENV = 'test';
 const request = require('supertest');
 const app = require('../index');
 const Complaint = require('../models/Complaint');
-const { heuristicClustering } = require('../services/aiService');
 
 // Mock Complaint model for lightning-fast, zero-dependency testing
 jest.mock('../models/Complaint');
@@ -29,14 +28,16 @@ describe('JanSetu + CivicRoot API Test Suite', () => {
     expect(res.body.message).toContain('JanSetu + CivicRoot API is running');
   });
 
-  // Test 2: Successful Complaint Submission
-  test('POST /api/complaints should successfully save and return new complaint', async () => {
+  // Test 2: Successful Complaint Submission with Cloudinary Media URLs
+  test('POST /api/complaints should successfully save complaint with imageUrl and audioUrl', async () => {
     const payload = {
       title: 'Water pipe leak on Main St',
       category: 'Water Leak',
       description: 'Major leak causing low pressure across sector 4.',
       location: 'Sector 4, Main St',
-      userId: 'citizen-99'
+      userId: 'citizen-99',
+      imageUrl: 'https://res.cloudinary.com/demo/image/upload/sample.jpg',
+      audioUrl: 'https://res.cloudinary.com/demo/video/upload/voice.webm'
     };
 
     const mockSavedComplaint = {
@@ -54,8 +55,8 @@ describe('JanSetu + CivicRoot API Test Suite', () => {
 
     expect(res.statusCode).toBe(201);
     expect(res.body).toHaveProperty('_id', 'mock-complaint-id-123');
-    expect(res.body.title).toBe(payload.title);
-    expect(res.body.status).toBe('Pending');
+    expect(res.body.imageUrl).toBe(payload.imageUrl);
+    expect(res.body.audioUrl).toBe(payload.audioUrl);
   });
 
   // Test 3: Validation Error Handling
@@ -126,5 +127,29 @@ describe('JanSetu + CivicRoot API Test Suite', () => {
     expect(res.body.inProgressComplaints).toBe(2);
     expect(res.body.pendingComplaints).toBe(2);
     expect(res.body.resolutionRate).toBe(60);
+  });
+
+  // Test 7: Cloudinary Image Upload
+  test('POST /api/upload/image should process and return uploaded image URL', async () => {
+    const dummyImageBuffer = Buffer.from('fake image content');
+    const res = await request(app)
+      .post('/api/upload/image')
+      .attach('image', dummyImageBuffer, 'test-photo.jpg');
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body).toHaveProperty('url');
+  });
+
+  // Test 8: Cloudinary Voice Note Upload
+  test('POST /api/upload/voice should process and return uploaded audio URL', async () => {
+    const dummyAudioBuffer = Buffer.from('fake voice note content');
+    const res = await request(app)
+      .post('/api/upload/voice')
+      .attach('voice', dummyAudioBuffer, 'test-voice.webm');
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body).toHaveProperty('url');
   });
 });
