@@ -41,6 +41,20 @@ app.get('/health', (req, res) => {
   });
 });
 
+// 404 Catch-All Handler
+app.use((req, res) => {
+  res.status(404).json({ error: 'Endpoint not found', path: req.originalUrl });
+});
+
+// Global Error Handler Middleware
+app.use((err, req, res, next) => {
+  console.error('Unhandled Server Error:', err);
+  res.status(err.status || 500).json({
+    error: 'Internal Server Error',
+    message: err.message || 'An unexpected error occurred on the server'
+  });
+});
+
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

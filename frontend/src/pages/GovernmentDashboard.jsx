@@ -26,9 +26,11 @@ const GovernmentDashboard = () => {
   });
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [errorNotice, setErrorNotice] = useState(null);
 
   const fetchData = async () => {
     setLoading(true);
+    setErrorNotice(null);
     try {
       const [hotspotsRes, statsRes] = await Promise.all([
         fetch(`${API_BASE_URL}/api/intelligence/hotspots`).catch(() => null),
@@ -37,14 +39,23 @@ const GovernmentDashboard = () => {
 
       if (hotspotsRes && hotspotsRes.ok) {
         const data = await hotspotsRes.json();
-        setHotspots(data.hotspots || []);
+        setHotspots(Array.isArray(data?.hotspots) ? data.hotspots : []);
       }
       if (statsRes && statsRes.ok) {
         const sData = await statsRes.json();
-        setStats(sData);
+        if (sData) {
+          setStats({
+            totalComplaints: sData.totalComplaints || 0,
+            resolvedComplaints: sData.resolvedComplaints || 0,
+            inProgressComplaints: sData.inProgressComplaints || 0,
+            pendingComplaints: sData.pendingComplaints || 0,
+            resolutionRate: sData.resolutionRate || 0
+          });
+        }
       }
     } catch (err) {
-      console.error('Failed to load civic intelligence:', err);
+      console.warn('Notice loading civic intelligence:', err.message);
+      setErrorNotice('Unable to fetch live intelligence feed from server.');
     } finally {
       setLoading(false);
     }
@@ -54,18 +65,19 @@ const GovernmentDashboard = () => {
     fetchData();
   }, []);
 
+  const safeHotspots = Array.isArray(hotspots) ? hotspots : [];
   const filteredHotspots = selectedCategory === 'All' 
-    ? hotspots 
-    : hotspots.filter(h => h.category?.toLowerCase() === selectedCategory.toLowerCase());
+    ? safeHotspots 
+    : safeHotspots.filter(h => (h?.category || '').toLowerCase() === selectedCategory.toLowerCase());
 
   const getRiskBadge = (risk) => {
     switch (risk?.toLowerCase()) {
       case 'high':
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-800 border border-red-200"><Flame className="w-3 h-3 mr-1" /> High Risk</span>;
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-800 border border-red-200 shrink-0"><Flame className="w-3 h-3 mr-1" /> High Risk</span>;
       case 'medium':
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200"><Clock className="w-3 h-3 mr-1" /> Medium Risk</span>;
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200 shrink-0"><Clock className="w-3 h-3 mr-1" /> Medium Risk</span>;
       default:
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200"><CheckCircle2 className="w-3 h-3 mr-1" /> Low Risk</span>;
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 shrink-0"><CheckCircle2 className="w-3 h-3 mr-1" /> Low Risk</span>;
     }
   };
 
@@ -74,30 +86,30 @@ const GovernmentDashboard = () => {
       {/* Top Navigation */}
       <header className="border-b border-slate-800 bg-[#1E293B]/80 backdrop-blur sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-blue-600 rounded-lg shadow-lg shadow-blue-500/30">
-              <Sparkles className="w-6 h-6 text-white" />
+          <div className="flex items-center space-x-2.5 sm:space-x-3">
+            <div className="p-2 bg-blue-600 rounded-lg shadow-lg shadow-blue-500/30 shrink-0">
+              <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-lg font-bold bg-gradient-to-r from-blue-400 to-indigo-200 bg-clip-text text-transparent">
+              <h1 className="text-sm sm:text-lg font-bold bg-gradient-to-r from-blue-400 to-indigo-200 bg-clip-text text-transparent truncate">
                 CivicRoot AI Command Center
               </h1>
-              <p className="text-xs text-slate-400">Preventive Municipal Intelligence & Hotspot Analytics</p>
+              <p className="text-[10px] sm:text-xs text-slate-400 hidden xs:block">Preventive Municipal Intelligence & Hotspot Analytics</p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2 sm:space-x-3 shrink-0">
             <button 
               onClick={fetchData}
               disabled={loading}
-              className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-md text-xs font-medium text-slate-200 flex items-center space-x-1.5 transition"
+              className="px-2.5 sm:px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-md text-xs font-medium text-slate-200 flex items-center space-x-1.5 transition cursor-pointer"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-              <span>{loading ? 'Refreshing...' : 'Refresh'}</span>
+              <span className="hidden sm:inline">{loading ? 'Refreshing...' : 'Refresh'}</span>
             </button>
             <Link 
               to="/report" 
-              className="px-3 py-1.5 bg-orange-600 hover:bg-orange-500 rounded-md text-xs font-semibold text-white transition"
+              className="px-2.5 sm:px-3 py-1.5 bg-orange-600 hover:bg-orange-500 rounded-md text-xs font-semibold text-white transition"
             >
               Citizen View
             </Link>
@@ -105,14 +117,26 @@ const GovernmentDashboard = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
+        
+        {/* Error Notice Banner */}
+        {errorNotice && (
+          <div className="p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-xs text-amber-300 flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+              <span>{errorNotice}</span>
+            </div>
+            <button onClick={fetchData} className="font-bold underline text-amber-400 cursor-pointer">Retry</button>
+          </div>
+        )}
+
         {/* Metric KPI Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          <div className="bg-[#1E293B] border border-slate-800 p-5 rounded-xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+          <div className="bg-[#1E293B] border border-slate-800 p-5 rounded-xl shadow-sm">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Grievances</p>
-                <h3 className="text-3xl font-bold mt-2 text-white">{stats.totalComplaints}</h3>
+                <h3 className="text-2xl sm:text-3xl font-bold mt-2 text-white">{stats.totalComplaints}</h3>
               </div>
               <div className="p-2.5 bg-blue-500/10 rounded-lg text-blue-400">
                 <BarChart3 className="w-5 h-5" />
@@ -123,11 +147,11 @@ const GovernmentDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-[#1E293B] border border-slate-800 p-5 rounded-xl">
+          <div className="bg-[#1E293B] border border-slate-800 p-5 rounded-xl shadow-sm">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">AI Hotspots Detected</p>
-                <h3 className="text-3xl font-bold mt-2 text-amber-400">{hotspots.length}</h3>
+                <h3 className="text-2xl sm:text-3xl font-bold mt-2 text-amber-400">{safeHotspots.length}</h3>
               </div>
               <div className="p-2.5 bg-amber-500/10 rounded-lg text-amber-400">
                 <ShieldAlert className="w-5 h-5" />
@@ -265,8 +289,8 @@ const GovernmentDashboard = () => {
             </button>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-300">
+          <div className="overflow-x-auto w-full">
+            <table className="w-full min-w-[680px] text-left text-xs text-slate-300">
               <thead className="bg-slate-900/60 text-slate-400 uppercase tracking-wider text-[11px] border-b border-slate-800">
                 <tr>
                   <th className="py-3.5 px-6">Identified Civic Pattern</th>
