@@ -209,7 +209,7 @@ const GovernmentDashboard = () => {
               <div className="text-center z-10 space-y-2">
                 <MapPin className="w-8 h-8 text-slate-600 mx-auto animate-bounce" />
                 <p className="text-sm text-slate-400">No active hotspots in this zone.</p>
-                <button onClick={handleSeedDemoData} className="text-xs text-blue-400 underline font-medium">Click to inject test complaints</button>
+                <p className="text-xs text-slate-500">Live clusters will appear here when citizen complaints are reported.</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full h-full p-2 z-10 overflow-y-auto">
