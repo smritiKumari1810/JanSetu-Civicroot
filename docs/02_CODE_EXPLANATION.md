@@ -59,17 +59,12 @@ Think of our application like a modern restaurant:
   - Sends it straight to **Cloudinary CDN**.
   - Returns a secure `https://res.cloudinary.com/...` link to attach to the grievance report.
 
-#### 📄 `backend/services/aiService.js` — The AI Detective
-* **Plain English:** The brain that connects the dots across complaints.
-* **What it does:**
-  - Gathers all complaints from the database.
-  - Sends them to **Google Gemini 3.6 Flash** with a structured prompt.
-  - Asks Gemini to:
-    1. Group similar complaints into **Hotspots**.
-    2. Grade the danger level as **High**, **Medium**, or **Low Risk**.
-    3. Diagnose the **Root Cause** (e.g. *"Subterranean water main failure"*).
-    4. Recommend **Preventive Action** (e.g. *"Dispatch excavation crew to valve #14"*).
-  - **Zero-Downtime Backup Engine:** If the Gemini API is temporarily offline or without an API key, a built-in mathematical clustering engine automatically takes over so the system never crashes!
+#### 📄 `backend/services/aiService.js` — The Triple-Tier AI Detective
+* **Plain English:** The intelligence brain that connects the dots across complaints with 3 safety nets.
+* **How it works:**
+  1. **Tier 1 (Primary):** Sends complaints to **Google Gemini 3.6 Flash** for semantic deduplication and deep root-cause reasoning.
+  2. **Tier 2 (Secondary Fallback):** If Gemini tokens are exhausted or rate-limited, it instantly hot-swaps to **Groq Cloud (Llama 3.3 70B)** at 500 tokens/second.
+  3. **Tier 3 (Tertiary Fallback):** If all external AI APIs are offline, our built-in mathematical clustering engine calculates hotspots locally so the system **never crashes or experiences downtime**.
 
 #### 📄 `backend/routes/intelligence.js` — The City Official API
 * **Plain English:** Delivers the AI insights to the government dashboard.
@@ -87,11 +82,15 @@ Think of our application like a modern restaurant:
 
 ### 🎨 2. The Frontend (`frontend/`)
 
+#### 📄 `frontend/src/components/ErrorBoundary.jsx` — The Zero-Crash Circuit Breaker
+* **Plain English:** An emergency safety net around the entire user interface.
+* **What it does:** If an unexpected visual error happens in the browser, instead of showing a blank white screen, it catches the error and displays a sleek, friendly recovery screen with a "Reload Page" button.
+
 #### 📄 `frontend/src/config/api.js` — The Smart Address Book
 * **Plain English:** Automatically connects the frontend to the backend whether running on your laptop (`localhost:5000`) or in production on **Render** (`https://jansetu-backend.onrender.com`).
 
 #### 📄 `frontend/src/App.jsx` — The Traffic Director
-* **Plain English:** Controls what page is shown when you click different tabs in the top navigation bar.
+* **Plain English:** Controls navigation across the app with responsive mobile-friendly tabs, a 404 route safety catcher, and a live DPI status footer.
 * **Routes:**
   - `/report` ➔ Opens the Citizen Reporting Page.
   - `/dashboard` ➔ Opens the Citizen Status Tracking Page.
@@ -102,7 +101,7 @@ Think of our application like a modern restaurant:
 * **Features:**
   - Category selector with clean icons.
   - **"📍 Auto-detect GPS"** button to automatically pinpoint location.
-  - **Photo Upload:** Select or snap a photo with live thumbnail preview.
+  - **Photo Upload:** Select or snap a photo with live thumbnail preview and 15MB file size safety checks.
   - **Voice Note Recorder:** Records audio live in the browser with play/pause and re-record controls.
   - Sends everything to Cloudinary and MongoDB with one click.
 
@@ -112,11 +111,12 @@ Think of our application like a modern restaurant:
   - Live search bar and filter tabs (*All*, *Pending*, *In Progress*, *Resolved*).
   - Status chips that change color automatically.
   - **"📷 View Attached Photo"** buttons and **🎙️ Audio Players** to listen to recorded voice notes.
+  - Safe null-handling and robust date formatter that never shows `Invalid Date`.
 
 #### 📄 `frontend/src/pages/GovernmentDashboard.jsx` — The CivicRoot AI Command Center
 * **Plain English:** The high-tech control room for city administrators.
 * **Features:**
   - **4 Top KPI Cards:** Total Grievances, AI Hotspots, High Risk Alerts, and Resolution Rate.
   - **Live Civic Risk Map:** A visual digital twin map with pulsing danger indicators showing where issues are clustering.
-  - **AI Root Cause & Preventive Action Matrix:** A clear table showing what the AI detected, why it happened, and what action engineers should take.
-  - **"⚡ Seed Demo Data" Button:** A one-click presentation tool to inject realistic test complaints and watch the AI detect hotspots live in front of the judges!
+  - **AI Root Cause & Preventive Action Matrix:** A clear table showing what the AI detected, why it happened, and what action engineers should take (with horizontal mobile scrolling support).
+  - **🔄 Live Refresh Button:** Instant one-click button to reload incoming complaints and re-run AI intelligence in real time.

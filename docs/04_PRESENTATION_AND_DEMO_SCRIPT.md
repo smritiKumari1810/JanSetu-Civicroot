@@ -39,10 +39,9 @@ Use this exact timing and script when presenting **JanSetu + CivicRoot AI** to t
 > 
 > **Layer 2 is CivicRoot AI — The Municipal Command Center.**  
 > *(Click 'CivicRoot AI' in top navigation to open `/gov-dashboard`)*  
-> This is where the magic happens. Watch what happens when we click **'⚡ Seed Demo Data'**...  
-> *(Click the Seed Demo Data button)*  
+> This is where the municipal intelligence comes alive.  
 > 
-> In seconds, CivicRoot's Google Gemini engine analyzes disparate reports across the city. Instead of 40 raw tickets, it detects **localized failure clusters**, rates their **risk severity**, and gives city engineers the exact root-cause diagnosis and recommended preventive action on our **Live Civic Risk Map**."*
+> In seconds, CivicRoot's AI engine analyzes disparate reports across the city. Instead of 40 raw tickets, it detects **localized failure clusters**, rates their **risk severity**, and gives city engineers the exact root-cause diagnosis and recommended preventive action on our **Live Civic Risk Map**."*
 
 ---
 
@@ -50,9 +49,9 @@ Use this exact timing and script when presenting **JanSetu + CivicRoot AI** to t
 *(Action: Show the Risk Matrix table on the dashboard)*
 
 > *"Behind the scenes:  
-> - We built a scalable **React 19 + Node.js & Express REST architecture** deployed seamlessly on **Vercel** and **Render**.  
-> - Our data is stored in **MongoDB Atlas**, and media is distributed through **Cloudinary CDN**.  
-> - Our AI pipeline uses **Google Gemini 3.6 Flash** for deep semantic understanding, backed by a zero-downtime heuristic fallback engine.  
+> - We built a responsive, mobile-first **React 19 + Node.js Express REST architecture** with full **React Error Boundary** protection for zero-crash reliability.  
+> - Our data is persisted on **MongoDB Atlas**, and evidence is optimized globally on **Cloudinary CDN**.  
+> - Our AI pipeline uses a **Triple-Tier Multi-Cloud Resilience Engine**: **Google Gemini 3.6 Flash** as primary, **Groq Cloud (Llama 3.3 70B)** as high-speed secondary fallback, and our **built-in local clustering algorithm** for 100% offline availability.  
 > - We have an automated test suite with **100% test coverage** across 9 test cases and dedicated `/health` monitoring."*
 
 ---

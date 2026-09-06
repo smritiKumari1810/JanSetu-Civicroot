@@ -7,6 +7,7 @@ Keep this pocket dictionary handy during your hackathon presentation! If a judge
 ### 1. Frontend & UI
 * **Frontend:** The visual part of the website that citizens and officials see, touch, and click. Built with **React** and styled with **Tailwind CSS**.
 * **React:** A popular web framework created by Meta (Facebook) that lets you build fast, interactive user interfaces using reusable Lego-like components.
+* **Error Boundary:** An emergency circuit breaker in React that catches unexpected screen errors and displays a friendly recovery screen with a "Reload" button rather than a white screen crash.
 * **Tailwind CSS:** A modern design tool that makes websites look clean, responsive, and beautiful on both mobile phones and desktop screens.
 * **SPA (Single Page Application):** A modern website style where pages switch instantly without making your whole browser reload.
 
@@ -31,9 +32,11 @@ Keep this pocket dictionary handy during your hackathon presentation! If a judge
 ---
 
 ### 4. Artificial Intelligence & Machine Learning
-* **LLM (Large Language Model):** An advanced AI model trained on massive amounts of text. We use **Google Gemini 3.6 Flash** to read and understand citizen complaints.
-* **Semantic Clustering:** The ability of AI to understand meaning rather than just matching exact keywords. (e.g., realizing that *"water gushing on road"* and *"muddy tap water"* are related to the same pipe break).
-* **Heuristic Fallback:** Our built-in backup engine. If the cloud AI is ever unreachable, our system automatically switches to local pattern algorithms so the app never goes down.
+* **LLM (Large Language Model):** An advanced AI model trained on massive amounts of text. We use **Google Gemini 3.6 Flash** as our primary intelligence layer.
+* **Groq Cloud (Llama 3.3):** An ultra-fast specialized AI inference engine running Meta's open-source Llama model at 500 tokens/second. Used as our secondary AI failover.
+* **Multi-Cloud AI Resilience:** An architecture that automatically swaps between AI providers (Gemini ➔ Groq ➔ Local Engine) so the system never fails if one API quota is exhausted.
+* **Semantic Clustering:** The ability of AI to understand meaning rather than just matching exact keywords (e.g., realizing that *"water gushing on road"* and *"muddy tap water"* are related to the same pipe break).
+* **Heuristic Fallback:** Our built-in local backup engine. If all external cloud AI APIs are unreachable, our local algorithm automatically calculates clusters on the server with zero downtime.
 * **Root Cause Analysis:** Moving beyond the symptom (a puddle on the street) to identify the true source (a broken underground main pipe).
 
 ---

@@ -62,11 +62,11 @@ Designed for 100% digital inclusion. No technical knowledge or bureaucratic jarg
 - **Transparent Tracking:** Color-coded status chips (*Pending Review*, *In Progress*, *Resolved*) and unique IDs (e.g. `#JS-8821`).
 
 ### 2. CivicRoot — The Government Command Center
-Designed for municipal municipal commissioners, ward engineers, and smart city operators:
+Designed for municipal commissioners, ward engineers, and smart city operators:
 - **KPI Summary Cards:** Real-time metrics on total complaints, active AI hotspots, high-risk failures, and resolution percentage.
 - **Live Civic Risk Map:** Digital twin visualizer highlighting geographical density and pulsing alert zones.
 - **AI Root-Cause Matrix:** Detailed table specifying the problem, the AI hypothesis, and the recommended engineering intervention.
-- **⚡ Instant Demo Seeder:** One-click button to inject realistic municipal test scenarios for demonstrations.
+- **🔄 Live Intelligence Refresh:** Instant one-click button to synchronize real-time analytics as new citizen complaints arrive.
 - **🏥 System Health Monitoring:** Dedicated `/health` endpoint reporting server uptime, database status, and API health.
 
 ---
@@ -76,8 +76,11 @@ Designed for municipal municipal commissioners, ward engineers, and smart city o
 | Component | Technology | Why We Chose It |
 |---|---|---|
 | **Frontend UI** | React 19 + Tailwind CSS | Lightning-fast, mobile-first, and ultra-accessible. |
+| **Fault Tolerance** | React Error Boundary | Zero-crash guarantee with friendly recovery UI. |
 | **Backend API** | Node.js + Express 5 | High concurrency, asynchronous non-blocking I/O. |
 | **Database** | MongoDB Atlas (Cloud) | Flexible document schema with rich geospatial indexing. |
-| **Artificial Intelligence** | Google Gemini (`@google/genai`) | Semantic reasoning and multi-complaint pattern detection. |
+| **Primary AI Tier** | Google Gemini (`@google/genai`) | Semantic reasoning and multi-complaint pattern detection. |
+| **Secondary AI Tier** | Groq Cloud (Llama 3.3 70B) | Ultra-fast 500 T/s fallback during token exhaustion/rate-limits. |
+| **Tertiary AI Tier** | Local Heuristic Engine | Built-in offline algorithm ensuring 100% uninterrupted uptime. |
 | **Media CDN** | Cloudinary | Instant image optimization and audio streaming for evidence. |
 | **Quality Assurance** | Jest & Supertest | Automated test suite guaranteeing zero regressions. |
